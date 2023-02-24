@@ -1,0 +1,15 @@
+[
+    {
+        "name":"Dashbord",
+        "link":"page/dashboard",
+        "user":"admin",
+        "icon":"educate-icon educate-home icon-wrap ",
+        "menu":false,
+        "menu-sub":[
+            {
+                "name":null,
+                "link":null
+            }
+        ]
+    }
+]

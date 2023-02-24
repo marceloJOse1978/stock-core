@@ -1,0 +1,30 @@
+{
+  "private": true,
+  "main": "desktop.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "start": "electron-forge start",
+    "build-exe": "electron-packager ./ --out=dist",
+    "package": "electron-forge package",
+    "make": "electron-forge make"
+  },
+  "devDependencies": {
+    "@electron-forge/cli": "^6.0.4",
+    "@electron-forge/maker-deb": "^6.0.4",
+    "@electron-forge/maker-rpm": "^6.0.4",
+    "@electron-forge/maker-squirrel": "^6.0.4",
+    "@electron-forge/maker-zip": "^6.0.4",
+    "axios": "^1.1.2",
+    "electron": "^22.0.3",
+    "electron-packager": "^17.1.1",
+    "laravel-vite-plugin": "^0.7.2",
+    "lodash": "^4.17.19",
+    "postcss": "^8.1.14",
+    "vite": "^4.0.0"
+  },
+  "dependencies": {
+    "electron-squirrel-startup": "^1.0.0",
+    "node-php-server": "^0.1.2"
+  }
+}

@@ -214,18 +214,18 @@
 							<a class="dropdown-item" href="{{route("settings.index")}}"
 								><i class="dw dw-settings2"></i> Configuração</a
 							>
-							<a class="dropdown-item" href=" {{-- {{{route("help.index")}}} --}} "
+							{{-- <a class="dropdown-item" href=""
 								><i class="dw dw-help"></i> Ajuda</a
-							>
+							> --}}
 							{{-- <a class="dropdown-item" href="{{{route("core.upgrades")}}}"
 								><i class="dw dw-up-arrow"></i> Upgrades</a
 							> --}}
 							<a class="dropdown-item" href="{{{route("checked.app")}}}"
 								><i class="dw dw-keyhole"></i> Activa Serial</a
 							>
-							<a class="dropdown-item" href=" {{{route("core.packs")}}} "
+							{{-- <a class="dropdown-item" href=" {{{route("core.packs")}}} "
 								><i class="dw dw-file"></i> Extensões</a
-							>
+							> --}}
 							<a class="dropdown-item" href="{{url("/exit")}}"
 								><i class="dw dw-logout"></i> Log Out</a
 							>
@@ -343,9 +343,9 @@
 						<li>
 							<div class="dropdown-divider"></div>
 						</li>
-						<li>
+						{{-- <li>
 							<div class="sidebar-small-cap">Extra</div>
-						</li>
+						</li> --}}
 					</ul>
 				</div>
 			</div>

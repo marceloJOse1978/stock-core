@@ -5,7 +5,7 @@
                 <div class="row">
                     <div class="col-md-12 col-sm-12">
                         <div class="title">
-                            <h4>Perfil - Usuário</h4>
+                            <h4>Perfil - Empresa</h4>
                         </div>
                         <nav aria-label="breadcrumb" role="navigation">
                             <ol class="breadcrumb">
@@ -52,6 +52,10 @@
                                 <li>
                                     <span>Numero de Telefone:</span>
                                     {{$row->phone_bs}}
+                                </li>
+                                <li>
+                                    <span>Numero de Telefone:</span>
+                                    {{$row->email_bs}}
                                 </li>
                             </ul>
                         </div>
@@ -122,6 +126,15 @@
                                                                 type="text"
                                                                 name="address_bs"
                                                                 value="{{$row->address_bs}}"
+                                                            />
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Email</label>
+                                                            <input
+                                                                class="form-control form-control-lg"
+                                                                type="text"
+                                                                name="email_bs"
+                                                                value="{{$row->email_bs}}"
                                                             />
                                                         </div>
                                                         <div class="form-group">

@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string("nif")->nullable();
             $table->string("address_bs")->nullable();
             $table->string("phone_bs")->nullable();
+            $table->string("email_bs")->nullable();
             $table->string("coin")->default("kwanza");
             $table->text("text")->nullable();
             $table->string("pic_path")->nullable();

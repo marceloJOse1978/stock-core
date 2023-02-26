@@ -13,10 +13,7 @@ class Setting extends Model
         'nif',
         'address_bs',
         'phone_bs',
-        'iban_1',
-        'account_1',
-        'iban_2',
-        'account_2',
+        'email_bs',
         'coin',
         'pic_path',
         'text'

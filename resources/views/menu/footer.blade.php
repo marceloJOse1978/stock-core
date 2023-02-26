@@ -57,6 +57,14 @@
 										<input type="text" id="phone_bs" name="phone_bs" class="form-control" required />
 									</div>
 								</div>
+								<div class="form-group row">
+									<label class="col-sm-4 col-form-label"
+										>Email*</label
+									>
+									<div class="col-sm-8">
+										<input type="text" id="email_bs" name="email_bs" class="form-control" required />
+									</div>
+								</div>
 							</div>
 						</section>
 						<!-- success Popup html Start -->
@@ -144,6 +152,53 @@
 						</button>
 					</div>
 				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<div
+	class="modal fade"
+	id="upgrades-modal"
+	tabindex="-1"
+	role="dialog"
+	aria-hidden="true"
+>
+	<div
+		class="modal-dialog modal-dialog-centered"
+		role="document"
+	>
+		<div class="modal-content">
+			<div class="modal-body text-center font-18">
+				<h4 class="padding-top-30 mb-30 weight-500">
+					NOVA ACTUALIZAÇÃO DESEJA ACTUALIZAR ?
+				</h4>
+				<div
+					class="padding-bottom-30 row"
+					style="max-width: 170px; margin: 0 auto"
+				>
+					<div class="col-6">
+						<button
+							type="button"
+							class="btn btn-secondary border-radius-100 btn-block confirmation-btn"
+							data-dismiss="modal"
+						>
+							<i class="fa fa-times"></i>
+						</button>
+						Não
+					</div>
+					<div class="col-6">
+							<a href="{{route("upgrades.index")}}">
+								<button
+									type="button"
+									class="btn btn-primary border-radius-100 btn-block confirmation-btn"
+									
+								>
+									<i class="fa fa-check"></i>
+								</button>
+							</a>
+							Sim
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -326,22 +381,33 @@ $('#login-modal').modal({
 	keyboard: false  // to prevent closing with Esc button (if you want this too)
 })
 </script>
+@if (!empty(Session::get('upgrades')))
+	<script>
+	$('#upgrades-modal').modal({
+		backdrop: 'static',
+		keyboard: false  // to prevent closing with Esc button (if you want this too)
+	})
+	</script>
+@endif
+
 @if (Session::get('days') !="Inativo" && empty(Session::get('data_system')))
-<script>
-$('#alert-modal').modal({
-	backdrop: 'static',
-	keyboard: false  // to prevent closing with Esc button (if you want this too)
-})
-</script>
+	<script>
+	$('#alert-modal').modal({
+		backdrop: 'static',
+		keyboard: false  // to prevent closing with Esc button (if you want this too)
+	})
+	</script>
 @endif
+
 @if (Session::get('days')!="Inativo" && Session::get('days')<=0)
-<script>
-$('#serial-key').modal({
-	backdrop: 'static',
-	keyboard: false  // to prevent closing with Esc button (if you want this too)
-})
-</script>
+	<script>
+	$('#serial-key').modal({
+		backdrop: 'static',
+		keyboard: false  // to prevent closing with Esc button (if you want this too)
+	})
+	</script>
 @endif
+
 {{-- FORM END --}}
 
 <!-- switchery js -->

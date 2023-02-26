@@ -47,6 +47,7 @@ class SettingController extends Controller
         $setting->name_bs=($request->name_bs=="") ? $setting->name_bs : $request->name_bs ;
         $setting->phone_bs=($request->phone_bs=="") ? $setting->phone_bs : $request->phone_bs ;
         $setting->address_bs=($request->address_bs=="") ? $setting->address_bs : $request->address_bs ;
+        $setting->address_bs=($request->email_bs=="") ? $setting->email_bs : $request->email_bs ;
         $setting->text=$request->text;
         $setting->pic_path="$setting->id.png";
         if (!empty($request->hasFile("pic_path"))) {

@@ -1,6 +1,6 @@
 <?php
 
-
+use App\Core\ConfigCore;
 use App\Http\Controllers\AllController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LoginController;
@@ -30,6 +30,7 @@ use App\Http\Controllers\TimeWorkController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VariantController;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -47,6 +48,41 @@ use App\Http\Controllers\VariantController;
 Route::get('/', function () {
     return view('login');
 })->middleware("core")->name("login");
+
+
+
+Route::get('/upgrades', function (Request $request,ConfigCore $configCore) {
+    session(['upgrades' => $configCore->versions()["actual"]]);
+    session(['actual' => $configCore->versions()["version"]]);
+    if ($request->ajax()) {
+        $data = $configCore->versions();
+        $url=null;
+        
+        
+        if (!empty($configCore->online())) 
+        if($configCore->upgrades()[0]!="Already up to date."){
+            $configCore->updateVersion($data["actual"]);
+            $url=url("/exit");
+        }
+        
+        
+        $data = $configCore->versions();
+        
+        
+        if (!empty($configCore->online())) 
+        return response()->json(array(
+            'message'=>" VERSÃO ".$data["version"]." INSTALADA",
+            "open"=>$url
+        ));
+
+        if (empty($configCore->online())) 
+        return response()->json(array(
+            'erro'=>"SEM ACESSO A INTERNET !"
+        ));
+    }
+    return view('upgrade');
+})->middleware("auth")->name("upgrades.index");
+
 
 
 #***** DASHBOAD START  *****# 
@@ -128,6 +164,7 @@ Route::controller(ExportController::class)->group(function () {
 });
 
 /* EXPORT VIEWS & ACTION*/
+
 Route::controller(TimeWorkController::class)->group(function () {
     Route::get('/timeworks/init', 'store')->name("init.timeworks")->middleware("auth");
 });

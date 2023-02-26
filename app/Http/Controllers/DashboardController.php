@@ -24,9 +24,8 @@ class DashboardController extends Controller
     
             # ESTA FUNÇÃO SERVE PARA VERFICAR TENTATIVA DE BURLA
             session(['data_system' => $configCore->checkdataOff()]);
+            session(['upgrades' => $configCore->versions()["status"]]);
             
-            
-            session(['days' => $configCore->dashboard()]);
         }
     }
     
@@ -60,7 +59,7 @@ class DashboardController extends Controller
         $works=TimeWork::orderBy("id","desc")
         ->where("user_id",Auth::id())
         ->first();
-        if ($works->status==false) {
+        if (empty($works->status)) {
             $status="ABRIR TURNO";
         }else {
             $status="FECHAR TURNO";

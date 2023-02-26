@@ -8,8 +8,9 @@ class ConfigCore
 {
     public $setting;
     public function __construct() {
-        $this->setting = 'setting-core.json';
+        $this->setting = '../../../../setting-core.json';
     }
+
     # --- ENVIA DADOS DO CLIENTE ---#
     public function createCompany($post=null,$token=null,$url="https://core.setmark.ao/api/companies") {
 
@@ -67,6 +68,10 @@ class ConfigCore
         return $days;
 
     }
+
+
+
+
     public function active($days = null, $key=null)
     {
         $data=$this->getSetting($this->setting,true);
@@ -109,12 +114,13 @@ class ConfigCore
         
         $dados = [
             'core' => 'https://core.setmark.ao/api/',
+            'version' => '1.0.3 beta (2023)',
             'data' => [
                 'id'=>null,#SE ESTIVE NULL CONTA NÃO PODE FAZER PAGAMENTOS MOSTRAR NO SISTEMA
                 'code'=>(empty($setting->nif)) ? "XXX XXX XXX" : $setting->nif,
                 'name'=>(empty($setting->name_bs)) ? "XXX XXX XXX" : $setting->name_bs,
                 'phone'=>(empty($setting->phone_bs)) ? "XXX XXX XXX" : $setting->phone_bs,
-                'email'=>"geral@galj-export.ao"
+                'email'=>(empty($setting->email_bs)) ? "XXX XXX XXX" : $setting->email_bs
             ],
             'license' => [
                 'key'=>"TEST",
@@ -131,9 +137,35 @@ class ConfigCore
 
     }
 
+    public function versions()
+    {
+        $data=$this->getSetting($this->setting,true);
+        $api = @json_decode(file_get_contents("http://core.setmark.ao/api/versions/1"));
+        
+        $version=$data["version"];
+        
+        if (!empty($api))
+        $version=$api->name;
 
 
+        if($version == $data["version"])
+        $status=false;
+        else
+        $status=true;
+        return array(
+            "version"=>$data["version"],
+            "actual"=>$version,
+            "status"=>$status
+        );
+    }
 
+    # ACTUALIZAR SISTEMA VIA GITHUB
+    public function upgrades()
+    {
+        $outp=[];
+        exec("git pull",$outp);
+        return $outp;
+    }
 
 
 
@@ -246,6 +278,15 @@ class ConfigCore
         $data["data"]["name"]=$request["name"];
         $data["data"]["phone"]=$request["phone"];
         $data["data"]["email"]=$request["email"];
+        $json = json_encode($data);
+        file_put_contents($this->setting, $json);
+    }
+
+    # --- ACTUALIZAR DADOS DO CLIENTE ---#
+    public function updateVersion($version="1.0.3 beta (2023)"){
+        
+        $data = json_decode(file_get_contents($this->setting),true);
+        $data["version"]=$version;
         $json = json_encode($data);
         file_put_contents($this->setting, $json);
     }

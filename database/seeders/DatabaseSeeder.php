@@ -24,12 +24,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        User::factory(2)->create();
-        Brands::factory(1)->createMany(array(
-            ["title"=>"HP"],
-            ["title"=>"ASUS"],
-            ["title"=>"IPAD"]
-        ));
         Variant::factory(1)->createMany([
             ["title"=>"AZUL"],
             ["title"=>"PRETO"],
@@ -44,28 +38,8 @@ class DatabaseSeeder extends Seeder
             ["title"=>"CASH"],
             ["title"=>"BANCO"]
         ]);
-        Providers::factory(3)->create();
-        Clients::factory(3)->create();
-        Product::factory(1)->createMany([
-            [
-                "title"=>"PC GAMER",
-                'gross_price'=>"100000",
-                'unit_id'=>"1",
-                'variant_id'=>"1",
-                'category_id'=>"3",
-                'brand_id'=>"1", 
-                'stock_type'=>"L", 
-            ],
-            [
-                "title"=>"AMBERNIC",
-                'gross_price'=>"35000",
-                'unit_id'=>"1",
-                'variant_id'=>"1",
-                'category_id'=>"3",
-                'brand_id'=>"1", 
-                'stock_type'=>"L", 
-            ]
-        ]);
+        Providers::factory(1)->create();
+        Clients::factory(1)->create();
 
         User::factory()->create([
              'name' => 'Admin',

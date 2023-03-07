@@ -17,22 +17,6 @@
                         </ol>
                     </nav>
                 </div>
-                {{-- <div class="col-md-6 col-sm-12 text-right">
-                    <div class="dropdown">
-                        <a
-                            class="btn btn-primary dropdown-toggle"
-                            href="#"
-                            role="button"
-                            data-toggle="dropdown"
-                        >
-                            Actividade
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right">
-                            <a class="dropdown-item" href=" {{url("stocks/create")}} ">Gravar</a>
-                            <a class="dropdown-item" href="#">Exportar Relatório</a>
-                        </div>
-                    </div>
-                </div> --}}
             </div>
         </div>
 
@@ -108,42 +92,30 @@
             </div>
         </div>
         <!-- Form grid Start -->
-        {{-- <div class="pd-20 card-box mb-30">
+        <div class="pd-20 card-box mb-30">
             <div class="clearfix">
                 <div class="pull-left">
                     <h4 class="text-blue h4">Capo de Busca</h4>
                     <p class="mb-30">Filtro de Pesquisa</p>
                 </div>
             </div>
-                <form action="{{url("reports/core/client")}}" method="POST" enctype="multipart/form-data">
+                <form action="{{url("reports/clients")}}" method="POST">
                     @csrf
                     <div class="row">
-                        <div class="col-md-3 col-sm-12">
-                            <label for="">Data Inicial</label>
-                            <div class="form-group">
-                                <input type="date" class="form-control" />
-                            </div>
-                        </div>
-                        <div class="col-md-3 col-sm-12">
-                            <label for="">Data Final</label>
-                            <div class="form-group">
-                                <input type="date" class="form-control" />
-                            </div>
-                        </div>
-                        <div class="col-md-3 col-sm-12">
-                            <label>Produto</label>
+                        <div class="col-md-10 col-sm-12">
+                            <label>FILTRAR PAGAMENTO</label>
                             <select
-                                class="custom-select2 form-control"
-                                name="product_id"
-                                id="product_id"
+                                class=" form-control"
+                                name="type"
                                 style="width: 100%; height: 38px">
-                                <option value="all">Todos Cliente</option>
-                                @foreach ($clients as $client)
-                                    <option value="{{$client->id}}">{{$client->name}}</option>
-                                @endforeach
+                                <option value="">Todos</option>
+                                <option value="1">Dividas</option>
+                                <option value="2">Fora Do Prazo</option>
+                                <option value="3">Dentro Do Prazo</option>
+                                <option value="4">Liquidado</option>
                             </select>
                         </div>
-                        <div class="col-md-3 col-sm-12">
+                        <div class="col-md-2 col-sm-12">
                             <label for=""></label>
                             <label for=""></label>
                             <div class="form-group">
@@ -155,7 +127,7 @@
                     </div>
                 </form>
             </div>
-        </div> --}}
+        </div>
         
         <div class="card-box pb-10">
             <div class="h5 pd-20 mb-0">Documento</div>
@@ -283,7 +255,7 @@
                                                         <div class="col-md-12 col-sm-12">
                                                             <div class="form-group">
                                                                 <label>Titulo do Pagamento</label>
-                                                                <input type="text" value="Pagemnto Parcelado {{$item->payments()->count()+1}}" name="title" class="form-control">
+                                                                <input type="text" value="Pagamento Parcelado {{$item->payments()->count()+1}}" name="title" class="form-control">
                                                             </div>
                                                         </div>
                                                     </div>

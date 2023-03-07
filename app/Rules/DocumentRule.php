@@ -7,6 +7,7 @@ use App\Models\Document;
 use App\Models\Item;
 use App\Models\Payment;
 use App\Models\Product;
+use App\Models\Stock;
 use App\Models\Tax;
 use Illuminate\Support\Facades\Auth;
 
@@ -24,6 +25,12 @@ class DocumentRule
         $amount= $data->gross_price*$data->tax_id/100;
         return $amount;
     }
+    public function discounts($amount,$total)
+    {
+        $data=explode(" ",$amount);
+        @$amount = ($data[1]=="%") ? ($data[0]/100)*$total : $data[0] ;
+        return $amount;
+    }
     public function registerRules($request, $id=null)
     {
         if (empty(session("document_id"))) {
@@ -38,12 +45,35 @@ class DocumentRule
                 'amount_gross'=>(empty($request->amount_gross)) ? 0 : $request->amount_gross,
                 'amount_net'=>(empty($request->amount_net)) ? 0 : $request->amount_net,
                 'date_due'=>( empty($request->date_due) ) ? date('Y-m-d', strtotime('+15 days')) : $request->date_due,
-                'discount'=>($request->discount==null) ? 0 : $request->discount,
+                'discount'=>($request->discount==null) ? 0 : $this->discounts($request->discount,$this->reportDocumentRules($id)["total"]["total"]),
                 'observations'=>$request->observations,
                 'external_reference'=>$request->external_reference,
             ]);
             $qty=(empty($request->qty)) ? 1 : $request->qty;
             $product=Product::find($id);
+            $qtd=Item::where("document_id",session("document_id"))->sum("qty");
+            if ($product->stock_type=="A")
+            $stock=Stock::where("product_id",$id)->sum("qty")-$qtd;
+            
+            if ($product->stock_type=="A"){
+
+                if ($request->qty<=$stock)
+                $document->items()->create(
+                    [
+                        'product_id' => $id,
+                        'qty' => $qty,
+                        'unit'=>$product->units->title,
+                        'tax'=>$product->tax_id,
+                        'total_tax'=>$this->taxes($id)*$qty,
+                        'title'=>$product->title,
+                        'impost'=>$this->taxes($id),
+                        'discount_for_itens'=>(empty($request->discount_for_itens)) ? 0 : $request->discount_for_itens,
+                        'net_total'=> $this->totalRules($request,$id)["net_total"],
+                        'gross_total'=> $this->totalRules($request,$id)["gross_total"], 
+                    ]
+                );
+            }
+            else
             $document->items()->create(
                 [
                     'product_id' => $id,
@@ -64,6 +94,28 @@ class DocumentRule
             $qty=(empty($request->qty)) ? 1 : $request->qty;
             if (empty(Document::find(session("document_id"))->status)) {
                 $product=Product::find($id);
+                
+                $qtd=Item::where("document_id",session("document_id"))->sum("qty");
+                if ($product->stock_type=="A")
+                $stock=Stock::where("product_id",$id)->sum("qty")-$qtd;
+                
+                if ($product->stock_type=="A"){
+                    if($request->qty<=$stock)
+                    $document=Item::create([
+                        'document_id' => session("document_id"),
+                        'product_id' => $id,
+                        'qty' => $qty,
+                        'unit'=>$product->units->title,
+                        'tax'=>$product->tax_id,
+                        'total_tax'=>$this->taxes($id)*$qty,
+                        'title'=>$product->title,
+                        'impost'=>$this->taxes($id),
+                        'discount_for_itens'=>(empty($request->discount_for_itens)) ? 0 : $request->discount_for_itens,
+                        'net_total'=> $this->totalRules($request,$id)["net_total"],
+                        'gross_total'=> $this->totalRules($request,$id)["gross_total"],  
+                    ]);
+                }
+                else
                 $document=Item::create([
                     'document_id' => session("document_id"),
                     'product_id' => $id,
@@ -153,7 +205,7 @@ class DocumentRule
             $data->amount_gross=$total["total"]["total"];
             $data->amount_net=Item::where("document_id",$id)->sum("net_total");
             $data->pay=(empty($request->pay)) ? false : $request->pay;
-            $data->discount= ($request->discount==null) ? 0 : $request->discount;
+            $data->discount= ($request->discount==null) ? 0 : $this->discounts($request->discount,$this->reportDocumentRules($id)["total"]["total"]);
             $data->observations=$request->observations;
             $data->external_reference=$request->external_reference;
             $data->save();

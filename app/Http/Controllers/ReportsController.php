@@ -29,22 +29,13 @@ class ReportsController extends Controller
             session(['days' => $configCore->dashboard()]);
         }
     }
-    public function client()
+    public function client($type=null, Request $request)
     {
-        $row = Document::where(
-            ["status"=>"1"]
-        )->get();
-        $data = Setting::whereDate('created_at', date('Y-m-d'));
-        
-        $dividas=Document::where(
-            ["pay"=>"0"],
-            ["status"=>"1"]
-        )->count();
-        $liquidado=Document::where(
-            ["pay"=>"1"],
-            ["status"=>"1"]
-        )->count();
-        
+        $dividas=Document::where(["pay"=>"0"],["status"=>"1"])
+        ->count();
+
+        $liquidado=Document::where(["pay"=>"1"],["status"=>"1"])
+        ->count();
 
         $dentro_prazo=Document::where('date_due', '>', date('Y-m-d'))
         ->where("pay",false)
@@ -58,7 +49,37 @@ class ReportsController extends Controller
         
         $clients = Clients::where("active","1")->get();
         $methods=Methods::where("status",true)->get();
-       /*  return response()->json(substr(explode("T",Setting::find(1)->created_at)[0],1)); */
+
+
+        switch ($type) {
+            case '4':
+                $row = Document::where(["pay"=>"1"],["status"=>"1"])->get();
+            break;
+            case '3':
+                $row = Document::where('date_due', '>', date('Y-m-d'))
+                ->where("pay",false)
+                ->where("status",true)
+                ->get();
+            break;
+            case '2':
+                $row = Document::where('date_due', '<', date('Y-m-d'))
+                ->where("pay",false)
+                ->where("status",true)
+                ->get();
+            break;
+            case '1':
+                $row = Document::where(["pay"=>"0"],["status"=>"1"])
+                ->get();
+            break;
+            case null:
+                $row = Document::where(
+                    ["status"=>"1"]
+                )->get();
+            break;
+        }
+
+
+
         return view('index',[
             'page'=>"report",
             'sub_page'=>"client",
@@ -70,9 +91,21 @@ class ReportsController extends Controller
             'collection'=>$row,
             'methods'=>$methods,
             'clients'=>$clients,
-            
             'title'=>$this->title.""
         ]);
+
+
+
+    }
+    public function clients(Request $request)
+    {
+        if ($request->ajax())
+        return response()->json(
+            [
+                "message"=>"A Gerar Relatório !",
+                "open"=>url("reports/clients/$request->type")
+            ]
+        );
     }
     public function cash($date_init=null,$date_end=null)
     {
@@ -229,6 +262,11 @@ class ReportsController extends Controller
             date("Y-m-d",strtotime("$date_init-$date_end-1")),
             date("Y-m-t",strtotime("$date_init-$date_end-1"))
         ])->get();
+        $total=Tax::whereBetween('date', 
+        [
+            date("Y-m-d",strtotime("$date_init-$date_end-1")),
+            date("Y-m-t",strtotime("$date_init-$date_end-1"))
+        ])->sum("total");
 
         if($request->ajax())
         return response()->json([
@@ -239,6 +277,7 @@ class ReportsController extends Controller
             'page'=>"report",
             'sub_page'=>"maps_tax",
             'collection'=>$row,
+            'total'=>$total,
             
             'title'=>$this->title
         ]);
@@ -251,6 +290,12 @@ class ReportsController extends Controller
             date("Y-m-t",strtotime("$date_init-$date_end-1"))
         ])->get();
 
+        $total=Tax::where("document_id","=",null)->whereBetween('date', 
+        [
+            date("Y-m-d",strtotime("$date_init-$date_end-1")),
+            date("Y-m-t",strtotime("$date_init-$date_end-1"))
+        ])->sum("total");
+
         if($request->ajax())
         return response()->json([
             "data"=>$row
@@ -260,6 +305,7 @@ class ReportsController extends Controller
             'page'=>"report",
             'sub_page'=>"maps_tax_providers",
             'collection'=>$row,
+            'total'=>$total,
             
             'title'=>$this->title.""
         ]);

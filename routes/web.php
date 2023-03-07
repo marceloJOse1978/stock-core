@@ -46,6 +46,10 @@ use Illuminate\Http\Request;
 
 
 Route::get('/', function () {
+    if(!is_dir('../../../../setting/')){
+        exec("git config --global --add safe.directory C:/core-stock/resources/app/stock-core",$outp);
+        mkdir('../../../../setting/', 0777, true);
+    }
     return view('login');
 })->middleware("core")->name("login");
 
@@ -57,8 +61,6 @@ Route::get('/upgrades', function (Request $request,ConfigCore $configCore) {
     if ($request->ajax()) {
         $data = $configCore->versions();
         $url=null;
-        
-        
         if (!empty($configCore->online())) 
         if($configCore->upgrades()[0]!="Already up to date."){
             $configCore->updateVersion($data["actual"]);
@@ -74,12 +76,14 @@ Route::get('/upgrades', function (Request $request,ConfigCore $configCore) {
             'message'=>" VERSÃO ".$data["version"]." INSTALADA",
             "open"=>$url
         ));
-
+    
         if (empty($configCore->online())) 
         return response()->json(array(
             'erro'=>"SEM ACESSO A INTERNET !"
         ));
     }
+    
+    
     return view('upgrade');
 })->middleware("auth")->name("upgrades.index");
 
@@ -132,7 +136,7 @@ Route::controller(SettingController::class)->group(function () {
 });
 /* REPORT CONTROLLER SERVE PARA CRIAR UMA ROUTE QUE GERIR */
 Route::controller(ReportsController::class)->group(function () {
-    Route::get('/reports/clients/{date_init?}/{date_end?}', 'client')->name("report.client")->middleware("admin");
+    Route::get('/reports/clients/{type?}', 'client')->name("report.client")->middleware("admin");
     Route::get('/reports/cash/{date_init?}/{date_end?}', 'cash')->name("report.cash")->middleware("admin");
     Route::get('/reports/products/{date_init?}/{date_end?}', 'products')->name("report.products")->middleware("admin");
     Route::get('/reports/category/{date_init?}/{date_end?}', 'category')->name("report.category")->middleware("admin");
@@ -144,6 +148,7 @@ Route::controller(ReportsController::class)->group(function () {
     Route::get('/reports/maps_tax/{date_init?}/{date_end?}', 'maps_tax')->name("report.maps_tax")->middleware("admin");
     Route::get('/reports/maps_tax_providers/{date_init?}/{date_end?}', 'maps_tax_providers')->name("report.maps_tax_providers")->middleware("admin");
     Route::post('/reports/core/{parament}', 'core')->middleware("admin");
+    Route::post('/reports/clients', 'clients')->middleware("admin");
 
 });
 /* IMPORT VIEWS & ACTION*/

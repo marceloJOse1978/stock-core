@@ -17,6 +17,7 @@ class DashboardController extends Controller
     public $title="Painel Inicial";
    
     public function __construct(ConfigCore $configCore) {
+        $configCore->setting();
         if (!empty(Setting::find(1)->id)) {
             # VERIFICAR APERTAR DA API ONLINE
             if($configCore->online()==true)

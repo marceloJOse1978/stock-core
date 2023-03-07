@@ -20,6 +20,27 @@
             </div>
         </div>
         <!-- Form grid Start -->
+        <div class="row pb-10">
+            <div class="col-xl-12 col-lg-12 col-md-12 mb-20">
+                <div class="card-box height-100-p widget-style3">
+                    <div class="d-flex flex-wrap">
+                        <div class="widget-data">
+                            <div class="weight-700 font-24 text-dark"> 
+                                {{number_format($total,2)}} 
+                            </div>
+                            <div class="font-14 text-secondary weight-500">
+                                TOTOAL
+                            </div>
+                        </div>
+                        <div class="widget-icon">
+                            <div class="icon" data-color="#00eccf">
+                                <i class="icon-copy fa fa-money"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="pd-20 card-box mb-30">
             <div class="clearfix">
                 <div class="pull-left">

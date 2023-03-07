@@ -613,42 +613,37 @@ $(function () {
 
     /* SEND CONTROLLER FOR CONTROLLER START */
     $('body').on('click', '#save-itens', function () {
-        if ($("#stock").val()>=$("#qty").val()) {
-            var id =$("#product_id").val();
-            $.ajax({
-                type: "GET",
-                url: "{{url('itens/create')}}/"+id,
-                data:{
-                    client_id:$("#client_id").val(),
-                    type:$("input[name='type']:checked").val(),
-                    product_id:$("#product_id").val(),
-                    qty:$("#qty").val(),
-                    gross_total:$("#gross_total").val(),
-                    discount_for_itens:$("#discount_for_itens").val(),
-                    number:$("#number").val(),
-                    date:$("#date").val(),
-                    pay:$("input[name='pay']:checked").val(),
-                    date_due:$("#date_due").val(),
-                    discount:$("#discount").val(),
-                    method_id:$("#method_id").val(),
-                    observations:$("#observations").val(),
-                    external_reference:$("#external_reference").val(),
-                },
-                dataType: "text",
-                success: function (response) {
-                    console.log(response);
-                    items($("#peq-like").val());
-                    $('#modal-all').modal("hide");
-                    localStorage.setItem("document_id",response.document_id);
-                    total();
-                    $('.data-table-doc').DataTable().ajax.reload();
-                    success("REGISTRAR ITENS");
-                }
-            });
-        }else {
-            error ("Sem Item no Stock para Vender");
-        }
-        
+        var id =$("#product_id").val();
+        $.ajax({
+            type: "GET",
+            url: "{{url('itens/create')}}/"+id,
+            data:{
+                client_id:$("#client_id").val(),
+                type:$("input[name='type']:checked").val(),
+                product_id:$("#product_id").val(),
+                qty:$("#qty").val(),
+                gross_total:$("#gross_total").val(),
+                discount_for_itens:$("#discount_for_itens").val(),
+                number:$("#number").val(),
+                date:$("#date").val(),
+                pay:$("input[name='pay']:checked").val(),
+                date_due:$("#date_due").val(),
+                discount:$("#discount").val(),
+                method_id:$("#method_id").val(),
+                observations:$("#observations").val(),
+                external_reference:$("#external_reference").val(),
+            },
+            dataType: "text",
+            success: function (response) {
+                console.log(response);
+                items($("#peq-like").val());
+                $('#modal-all').modal("hide");
+                localStorage.setItem("document_id",response.document_id);
+                total();
+                $('.data-table-doc').DataTable().ajax.reload();
+                success("REGISTRAR ITENS");
+            }
+        });
     });
     /* SEND CONTROLLER FOR CONTROLLER END */
 

@@ -7,8 +7,10 @@ use App\Models\Setting;
 class ConfigCore 
 {
     public $setting;
+    public $file;
     public function __construct() {
-        $this->setting = '../../../../setting-core.json';
+        $this->setting = '../../../../setting/setting-core.json';
+        $this->file="setting-core.json";
     }
 
     # --- ENVIA DADOS DO CLIENTE ---#
@@ -79,7 +81,8 @@ class ConfigCore
             $data["license"]["date_end"]=date("Y-m-d", strtotime("+$days days", strtotime($data["license"]["date_end"])));
             $data["license"]["key"]=$key;
             $json = json_encode($data);
-            file_put_contents($this->setting, $json);
+            file_put_contents($this->file, $json);
+            rename($this->file,$this->setting);
         }
     }
 
@@ -129,11 +132,10 @@ class ConfigCore
                 'date_now'=>date("Y-m-d")
             ]
         ];
-        
-        $arquivo ='setting-core.json';
-
-        if (empty(file_exists($this->setting)))
-            file_put_contents($this->setting, json_encode($dados));
+        if (empty(file_exists($this->setting))){
+            file_put_contents($this->file, json_encode($dados));
+            rename($this->file,$this->setting);
+        }
 
     }
 
@@ -146,7 +148,8 @@ class ConfigCore
         
         if (!empty($api))
         $version=$api->name;
-
+        //file_put_contents($this->file, json_encode($data));
+        //rename($this->file,$this->setting);
 
         if($version == $data["version"])
         $status=false;
@@ -279,7 +282,8 @@ class ConfigCore
         $data["data"]["phone"]=$request["phone"];
         $data["data"]["email"]=$request["email"];
         $json = json_encode($data);
-        file_put_contents($this->setting, $json);
+        file_put_contents($this->file, $json);
+        //rename($this->file,$this->setting);
     }
 
     # --- ACTUALIZAR DADOS DO CLIENTE ---#
@@ -288,7 +292,9 @@ class ConfigCore
         $data = json_decode(file_get_contents($this->setting),true);
         $data["version"]=$version;
         $json = json_encode($data);
-        file_put_contents($this->setting, $json);
+        file_put_contents($this->file, $json);
+        rename($this->file,$this->setting);
+
     }
 
 
@@ -305,7 +311,8 @@ class ConfigCore
             #PODE USAR O SISTEMA
             $data["license"]["date_now"]=date("Y-m-d");
             $json = json_encode($data);
-            file_put_contents($this->setting, $json);
+            file_put_contents($this->file, $json);
+            rename($this->file,$this->setting);
             return true;
         }else {
             #NÃO PODE USAR O SISTEMA
@@ -326,7 +333,8 @@ class ConfigCore
         if (!empty($api->date_now)) {
             $data["license"]["date_now"]=$api->date_now;
             $json = json_encode($data);
-            file_put_contents($this->setting, $json);
+            file_put_contents($this->file, $json);
+            rename($this->file,$this->setting);
         }
     }
 

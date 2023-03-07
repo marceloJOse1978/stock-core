@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\SoftwareController;
 use App\Models\Product;
 use App\Models\Stock;
+use App\Rules\DocumentRule;
 use App\Rules\StockRule;
 use Illuminate\Support\Facades\Route;
 
@@ -34,6 +35,6 @@ Route::apiResources([
     "notice"=>Notification::class
 ]);
 
-Route::get("/teste/{id}",function( StockRule $stockRule, $id=null,$product_id=3,$qty=4,$move=false){
-   $stockRule->createRule($id,$product_id,$qty,$move);
+Route::get("/teste/{amount?}",function($amount,DocumentRule $documentRule){
+  return response()->json($documentRule->discounts($amount,1000));
 });

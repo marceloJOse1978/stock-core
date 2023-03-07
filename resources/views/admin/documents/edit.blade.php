@@ -657,16 +657,18 @@ $(function () {
                 discount_for_itens:$("#discount_for_itens").val(),
                 number:$("#number").val(),
                 date:$("#date").val(),
-                pay:$("#pay").val(),
+                pay:$("input[name='pay']:checked").val(),
                 date_due:$("#date_due").val(),
-                method_id:$("#method_id").val(),
                 discount:$("#discount").val(),
+                method_id:$("#method_id").val(),
                 observations:$("#observations").val(),
                 external_reference:$("#external_reference").val(),
             },
             dataType: "text",
             success: function (response) {
                 console.log(response);
+                items($("#peq-like").val());
+                $('#modal-all').modal("hide");
                 localStorage.setItem("document_id",response.document_id);
                 total();
                 $('.data-table-doc').DataTable().ajax.reload();
@@ -686,7 +688,8 @@ $(function () {
             dataType: "TEXT",
             success: function (response) {
                 $('.data-table-doc').DataTable().ajax.reload();
-                total()
+                total();
+                items($("#peq-like").val());
                 success("DADOS REMOVIDOS");
             }
         });

@@ -126,6 +126,7 @@ class SettingController extends Controller
 
     public function send( Request $request, $id=null,ConfigCore $configCore){
         $data=$configCore->payments($id);
+        $configCore->init();
         if ($request->ajax())
         return response()->json([
             'message'=>$data["msg"],
@@ -134,6 +135,7 @@ class SettingController extends Controller
     }
     public function serial( Request $request, $id=null,ConfigCore $configCore){
         $data=$configCore->checkedSerial($request->serial);
+        $configCore->init();
         $sms = (empty($data)) ? "Licença Negada !" : "Licença de  $data Dias!"  ;
         $_SESSION["days"]=$configCore->dashboard();
         if ($request->ajax())

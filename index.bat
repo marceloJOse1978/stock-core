@@ -1,2 +1,2 @@
 @ECHO OFF
-C:\CORE-STOCK\resources\app\php\php.exe artisan storage:link
+C:\core-stock\resources\app\php\php.exe artisan storage:link

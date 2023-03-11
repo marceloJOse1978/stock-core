@@ -32,27 +32,15 @@ class DashboardController extends Controller
     
     public function show($page="home")
     {
-        $row=cache()->remember("homepage-books",10,function (){
-            return Clients::where("active",true)->get();
-        });
-        $client=cache()->remember("homepage-client-count",10,function (){
-            return Clients::where("active",true)->count();
-        });
-        $stock=cache()->remember("homepage-stock-count",10,function (){
-            return Stock::where("active",true)->count();
-        });
-        $product=cache()->remember("homepage-product-count",10,function (){
-            return Product::where("active",true)->count();
-        });
-        $document=cache()->remember("homepage-document-count",10,function (){
-            return Document::where("status",true)->count();
-        });
-        $sale=cache()->remember("homepage-sale-sum",10,function (){
-            return number_format(Invoice::where("status",true)->sum("amount_gross"),2,",",".");
-        });
-        $buy=cache()->remember("homepage-buy-sum",10,function (){
-            return number_format(Document::where("status",true)->sum("amount_gross"),2,",",".");
-        });
+        $row=Clients::where("active",true)->get();
+        $client=Clients::where("active",true)->count();
+        $stock= Stock::where("active",true)->count();
+        $product=Product::where("active",true)->count();
+        $document= Document::where("status",true)->count();
+        $sale= number_format(Invoice::where("status",true)->sum("amount_gross"),2,",",".");
+        
+        $buy= number_format(Document::where("status",true)->sum("amount_gross"),2,",",".");
+        
 
         $timework=TimeWork::where("status",true)
         ->limit(5)

@@ -29,7 +29,7 @@ class ReportsController extends Controller
             session(['days' => $configCore->dashboard()]);
         }
     }
-    public function client($type=null, Request $request)
+    public function client($type=null)
     {
         $dividas=Document::where(["pay"=>"0"],["status"=>"1"])
         ->count();
